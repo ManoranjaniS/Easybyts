@@ -1,236 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Portfolio | Manoranjani Selvakumar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK Trading Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Full window height */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: left;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            height: 100%;
+            padding-top: 80px; /* Allow space for header */
+            box-sizing: border-box;
+        }
+
+        .panel {
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .panel h2, .panel h3 {
+            margin-top: 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-error {
+            color: red;
+        }
+
+        .form-success {
+            color: green;
+        }
+
+        .stock-item {
+            padding: 10px;
+            margin: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .stock-actions {
+            margin-top: 10px;
+        }
+
+        .stock-pair {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .growth-chart {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Adjust for large screens */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .left-panel, .right-panel {
+                flex-grow: 1;
+                margin: 10px;
+            }
+
+            .right-panel {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        .insufficient-funds {
+            color: red;
+            font-weight: bold;
+        }
+
+        .left-panel, .right-panel {
+            flex-grow: 1;
+        }
+
+        .right-panel {
+            margin-top: 20px;
+        }
+
+        .transaction-history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-history-table th, .transaction-history-table td {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .transaction-history-table th {
+            background-color: #f4f4f9;
+        }
+
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-10">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="#home" class="text-2xl font-bold">Manoranjani Selvakumar</a>
-      <ul class="flex space-x-6">
-        <li><a href="#home" class="hover:text-gray-200">Home</a></li>
-        <li><a href="#about" class="hover:text-gray-200">About</a></li>
-        <li><a href="#skills" class="hover:text-gray-200">Skills</a></li>
-        <li><a href="#projects" class="hover:text-gray-200">Projects</a></li>
-        <li><a href="#contact" class="hover:text-gray-200">Contact</a></li>
-      </ul>
-    </div>
-    
-  </nav>
-  
 
-  <!-- Home Section -->
-  <section id="home" class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white text-center py-40">
-    <h1 class="text-5xl font-bold mb-4">Hi, I'm <span class="text-yellow-400">Manoranjani Selvakumar</span></h1>
-    <p class="text-xl">I'm a 3rd-year B.E. Computer Science student, aspiring Full Stack Developer.</p>
-  </section>
+<body>
+    <header>
+        <h1>MK Trading Platform</h1>
+    </header>
 
-  <!-- About Section -->
- <!-- About Me Section -->
-<section id="about" class="py-20 bg-white text-center">
-    <h2 class="text-3xl font-semibold mb-10">About Me</h2>
-    <p class="text-lg mb-4 max-w-3xl mx-auto">I am an aspiring software developer currently pursuing my 3rd year in Computer Science Engineering. With a strong focus on Java, Android, and Full Stack development, I am constantly striving to enhance my skills and knowledge. My passion lies in leveraging technology to solve real-world problems and create innovative solutions. I enjoy working on both front-end and back-end technologies and am always excited about learning new tools and frameworks to improve my development abilities.</p>
-  </section>
-  <!-- Education Section -->
-<section id="education" class="py-20 bg-white text-center">
-    <h2 class="text-3xl font-semibold mb-10">Education</h2>
-    <div class="max-w-4xl mx-auto space-y-8">
-      
-      <!-- Bachelor of Engineering (CSE) -->
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Bachelor of Engineering (B.E.) in Computer Science & Engineering</h3>
-        <p class="text-lg text-gray-700">V.S.B. Engineering College (2022 - 2026)</p>
-        <p class="text-lg text-gray-700">Currently pursuing 4th Semester, CGPA: 8.75</p>
-        <p class="mt-4 text-gray-600">I am working towards becoming a Full Stack Developer. During my studies, I have gained strong foundations in both front-end and back-end technologies and developed expertise in areas like algorithms, data structures, and software engineering principles.</p>
-      </div>
-      
-      <!-- Higher Secondary Education -->
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Higher Secondary School</h3>
-        <p class="text-lg text-gray-700">Rasammal Matric Hr. Sec School, 2020-2022</p>
-        <p class="text-lg text-gray-700">Percentage: 85%</p>
-        <p class="mt-4 text-gray-600">I completed my higher secondary education with a focus on Mathematics and Computer Science, which strengthened my passion for computer science and laid the foundation for my B.E. studies.</p>
-      </div>
-  
-      <!-- Secondary Education -->
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Secondary Education</h3>
-        <p class="text-lg text-gray-700">Rasammal Matric Hr. Sec School, 2019-2020</p>
-        <p class="text-lg text-gray-700">Percentage: 98.5%</p>
-        <p class="mt-4 text-gray-600">I completed my secondary education with outstanding academic performance, which motivated me to pursue higher studies in Computer Science & Engineering.</p>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Contact Section -->
-  <section id="contact" class="py-20 bg-gray-100 text-center">
-    <h2 class="text-3xl font-semibold mb-10">Contact Me</h2>
-    <p class="text-lg mb-4">Feel free to reach out to me, I'd love to hear from you!</p>
-  <!-- Contact Section -->
-<section id="contact" class="py-20 bg-gray-100 text-center">
-  <h2 class="text-3xl font-semibold mb-10">Contact Me</h2>
-  <p class="text-lg mb-4">Feel free to reach out to me, I'd love to hear from you!</p>
+    <div class="container" id="app-container">
+        <!-- Registration Section -->
+        <div id="registration-panel" class="panel">
+            <h2>Register</h2>
+            <form id="registration-form">
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" class="form-input" required>
+                </div>
+                <div>
+                    <label for="password">Password (8 characters max):</label>
+                    <input type="password" id="password" class="form-input" required>
+                </div>
+                <div>
+                    <input type="checkbox" id="captcha" required>
+                    <label for="captcha">I'm not a robot</label>
+                </div>
+                <div>
+                    <button type="submit" class="btn">Register</button>
+                </div>
+                <div id="registration-error" class="form-error"></div>
+            </form>
+        </div>
 
-  <!-- Contact Form -->
-  <form action="#" method="POST" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg space-y-6">
-    <!-- Name Field -->
-    <div>
-      <label for="name" class="block text-left text-lg font-medium text-gray-700">Your Good Name</label>
-      <input type="text" id="name" name="name" placeholder="Enter your name" required
-        class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+        <!-- Main Content (Stock Trading) - Hidden initially -->
+        <div id="main-content-panel" class="panel" style="display: none;">
+            <div class="left-panel">
+                <div id="dashboard"></div>
+                <div id="stock-list"></div>
+            </div>
+
+            <div class="right-panel">
+                <h3>My Growth</h3>
+                <canvas id="growth-chart" class="growth-chart"></canvas>
+                <h3>Transaction History</h3>
+                <table class="transaction-history-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Action</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-history"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <!-- Email Field -->
-    <div>
-      <label for="email" class="block text-left text-lg font-medium text-gray-700">Your Email</label>
-      <input type="email" id="email" name="email" placeholder="Enter your email" required
-        class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-    </div>
+    <script>
+        let user = {
+            username: '',
+            password: '',
+            balance: 10000 // Starting balance
+        };
 
-    <!-- Message Field -->
-    <div>
-      <label for="message" class="block text-left text-lg font-medium text-gray-700">Write Message</label>
-      <textarea id="message" name="message" rows="4" placeholder="Write your message here" required
-        class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-    </div>
+        const stocks = [
+            { symbol: "AAPL", name: "Apple Inc.", price: 145.09 },
+            { symbol: "AMZN", name: "Amazon", price: 3341.95 },
+            { symbol: "GOOG", name: "Google", price: 2750.56 },
+            { symbol: "MSFT", name: "Microsoft", price: 299.35 },
+            { symbol: "TSLA", name: "Tesla", price: 774.46 },
+            { symbol: "META", name: "Meta", price: 345.65 },
+            { symbol: "NFLX", name: "Netflix", price: 456.78 },
+            { symbol: "NVDA", name: "NVIDIA", price: 860.12 },
+            { symbol: "AMD", name: "AMD", price: 121.45 },
+            { symbol: "BA", name: "Boeing", price: 227.35 }
+        ];
 
-    <!-- Send Button -->
-    <div>
-      <button type="submit" class="w-full py-3 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        Send Message
-      </button>
-    </div>
-  </form>
-</section>
+        let portfolio = {};
+        let transactionHistory = [];
+        let growthData = [];
+        let timestamps = [];
+        let growthChart;
 
+        // Handle registration
+        document.getElementById("registration-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const captcha = document.getElementById("captcha").checked;
 
+            // Validate username and password
+            if (username === '' || password === '') {
+                document.getElementById("registration-error").textContent = 'Username and password are required.';
+                return;
+            }
+            if (password.length > 8) {
+                document.getElementById("registration-error").textContent = 'Password must be 8 characters or less.';
+                return;
+            }
+            if (!captcha) {
+                document.getElementById("registration-error").textContent = 'You must confirm you are not a robot.';
+                return;
+            }
 
-  <!-- Personal Information Section -->
-  <section id="info" class="py-20 bg-white text-center">
-    <h2 class="text-3xl font-semibold mb-10">Contact Information</h2>
-    <div class="max-w-md mx-auto space-y-8">
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Phone</h3>
-        <p class="text-lg text-gray-700">8682048249</p>
-      </div>
-  
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">LinkedIn</h3>
-        <p class="text-lg text-gray-700"><a href="https://www.linkedin.com/in/manoranjani-selvakumar-b8591227b/" class="text-indigo-600 hover:text-indigo-800" target="_blank">MANORANJANI SELVAKUMAR</a></p>
-      </div>
-  
-      
-  
-      <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Languages</h3>
-        <ul class="list-disc text-left space-y-2">
-          <li>Tamil</li>
-          <li>English</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-  <!-- Skills Section -->
-<section id="skills" class="py-20 bg-gray-50 text-center">
-  <h2 class="text-3xl font-semibold mb-10">Skills</h2>
-  <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-12">
-    <!-- Skill 1: Java -->
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold mb-4">Java</h3>
-      <p class="text-lg text-gray-700">Proficient in Java programming with experience in building console and desktop applications. Strong understanding of object-oriented programming principles and design patterns.</p>
-    </div>
+            // Successful registration
+            user.username = username;
+            user.password = password;
+            document.getElementById("registration-panel").style.display = 'none';
+            document.getElementById("main-content-panel").style.display = 'flex';
+            showDashboard();
+            displayStocks();
+        });
 
-    <!-- Skill 2: HTML -->
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold mb-4">HTML</h3>
-      <p class="text-lg text-gray-700">Experienced in creating semantic and accessible web pages using HTML. Able to build clean, structured markup for front-end development.</p>
-    </div>
+        // Show dashboard with portfolio and transaction history
+        function showDashboard() {
+            const dashboard = document.getElementById("dashboard");
+            dashboard.innerHTML = ` 
+                <h2>Welcome, ${user.username}!</h2>
+                <p>Your current balance: $${user.balance.toFixed(2)}</p>
+                <h3>Your Portfolio</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Shares</th>
+                            <th>Average Price</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="portfolio-table-body"></tbody>
+                </table>
+                ${user.balance <= 0 ? '<p class="insufficient-funds">Insufficient funds to make any transactions.</p>' : ''}
+            `;
+        }
 
-    <!-- Skill 3: CSS -->
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold mb-4">CSS</h3>
-      <p class="text-lg text-gray-700">Skilled in using CSS to style and layout web pages. Familiar with Flexbox, CSS Grid, and responsive design principles to create mobile-first websites.</p>
-    </div>
+        // Display stocks in 5 pairs
+        function displayStocks() {
+            const stockList = document.getElementById("stock-list");
+            stockList.innerHTML = '';
+            for (let i = 0; i < stocks.length; i += 2) {
+                const stockPair = document.createElement('div');
+                stockPair.classList.add('stock-pair');
+                stockPair.innerHTML = `
+                    <div class="stock-item">
+                        <div class="stock-name">${stocks[i].name} (${stocks[i].symbol})</div>
+                        <div class="stock-price">$${stocks[i].price.toFixed(2)}</div>
+                        <div class="stock-actions">
+                            <button class="btn" onclick="buyStock('${stocks[i].symbol}', ${stocks[i].price})">Buy</button>
+                            <button class="btn" onclick="sellStock('${stocks[i].symbol}', ${stocks[i].price})">Sell</button>
+                        </div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="stock-name">${stocks[i + 1].name} (${stocks[i + 1].symbol})</div>
+                        <div class="stock-price">$${stocks[i + 1].price.toFixed(2)}</div>
+                        <div class="stock-actions">
+                            <button class="btn" onclick="buyStock('${stocks[i + 1].symbol}', ${stocks[i + 1].price})">Buy</button>
+                            <button class="btn" onclick="sellStock('${stocks[i + 1].symbol}', ${stocks[i + 1].price})">Sell</button>
+                        </div>
+                    </div>
+                `;
+                stockList.appendChild(stockPair);
+            }
+        }
 
-    <!-- Skill 4: JavaScript -->
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold mb-4">JavaScript</h3>
-      <p class="text-lg text-gray-700">Strong command over JavaScript for dynamic web development. Experience with DOM manipulation, event handling, asynchronous programming, and using modern JavaScript libraries.</p>
-    </div>
+        // Handle stock buying
+        function buyStock(symbol, price) {
+            const quantity = prompt(`How many shares of ${symbol} do you want to buy?`);
+            if (quantity && !isNaN(quantity) && quantity > 0) {
+                const totalCost = price * quantity;
+                if (user.balance >= totalCost) {
+                    // Update balance and portfolio
+                    user.balance -= totalCost;
+                    if (!portfolio[symbol]) {
+                        portfolio[symbol] = { price, quantity: 0 };
+                    }
+                    portfolio[symbol].quantity += parseInt(quantity);
+                    addTransaction(symbol, 'Buy', quantity, price);
+                    showDashboard();
+                    updateGrowthChart();
+                } else {
+                    alert('Insufficient funds to make this purchase.');
+                }
+            }
+        }
 
-    <!-- Skill 5: Node.js -->
-    <div class="bg-white p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-semibold mb-4">Node.js</h3>
-      <p class="text-lg text-gray-700">Experience in building backend applications using Node.js. Familiar with Express.js, RESTful APIs, and integrating databases with MongoDB.</p>
-    </div>
-  </div>
-</section>
-  <!-- Projects Section -->
+        // Handle stock selling
+        function sellStock(symbol, price) {
+            const quantity = prompt(`How many shares of ${symbol} do you want to sell?`);
+            if (quantity && !isNaN(quantity) && quantity > 0 && portfolio[symbol] && portfolio[symbol].quantity >= quantity) {
+                const totalSale = price * quantity;
+                user.balance += totalSale;
+                portfolio[symbol].quantity -= parseInt(quantity);
+                if (portfolio[symbol].quantity === 0) {
+                    delete portfolio[symbol];
+                }
+                addTransaction(symbol, 'Sell', quantity, price);
+                showDashboard();
+                updateGrowthChart();
+            } else {
+                alert('You do not have enough shares to sell.');
+            }
+        }
 
-  <section id="projects" class="py-20 px-6 bg-white text-center">
-    <h2 class="text-3xl font-semibold mb-10">Projects</h2>
-    <div class="space-y-12">
-      <!-- Project 1 -->
-      <div class="bg-gray-200 p-6 rounded-lg shadow-md">
-        <h3 class="text-2xl font-semibold mb-4">Project One</h3>
-        <p class="text-lg mb-4">I successfully completed the Java Foundation course by Oracle, which covered core concepts in Java programming, object-oriented principles, and best practices for building scalable applications.</p>
-        <a href="https://github.com/ManoranjaniS/oracle-java-foundation" class="text-indigo-600 hover:text-indigo-800">View on GitHub</a>
-      </div>
-      </div>
-     </section>     
+        // Record transaction
+        function addTransaction(symbol, action, quantity, price) {
+            const total = price * quantity;
+            transactionHistory.push({ symbol, action, quantity, price, total });
+            displayTransactionHistory();
+        }
 
-      <!-- Internship Experience Section -->
-<section id="internship" class="py-20 bg-white text-center">
-  <h2 class="text-3xl font-semibold mb-10">Internship Experience</h2>
-  <div class="max-w-4xl mx-auto space-y-8">
+        // Display transaction history
+        function displayTransactionHistory() {
+            const history = document.getElementById("transaction-history");
+            history.innerHTML = '';
+            transactionHistory.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.symbol}</td>
+                    <td>${transaction.action}</td>
+                    <td>${transaction.quantity}</td>
+                    <td>$${transaction.price.toFixed(2)}</td>
+                    <td>$${transaction.total.toFixed(2)}</td>
+                `;
+                history.appendChild(row);
+            });
+        }
+// Update growth chart with portfolio value (balance + stocks)
+function updateGrowthChart() {
+    // Calculate the total value of the portfolio
+    const totalPortfolioValue = Object.keys(portfolio).reduce((total, symbol) => {
+        const stock = stocks.find(stock => stock.symbol === symbol);
+        return total + (stock.price * portfolio[symbol].quantity);
+    }, 0) + user.balance;
 
-    <!-- Internship at Novanector Pvt. Ltd. -->
-    <div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-      <h3 class="text-2xl font-bold mb-2">Internship at Novanector Pvt. Ltd.</h3>
-      <p class="text-lg text-gray-700">Novanector Pvt. Ltd. (2024)</p>
-      <p class="mt-4 text-gray-600">During my internship at Novanector Pvt. Ltd., I gained valuable experience in front-end and full-stack web development. I worked on the following key projects:</p>
-      <ul class="list-disc text-left space-y-2 mt-4">
-        <li><strong>Percentage Calculator:</strong> Developed a web-based tool to calculate student percentages with ease. I worked on JavaScript to manage user input, perform calculations, and display results dynamically.</li>
-        <li><strong>Quiz Application:</strong> Built an interactive quiz app where users can test their knowledge on various topics. The project involved JavaScript for dynamic quiz handling, timers, and storing scores.</li>
-        <li><strong>Sleek Portfolio Website:</strong> Designed and developed a sleek, responsive portfolio website to showcase my projects and skills. I used HTML, CSS, and JavaScript to create a user-friendly and visually appealing experience with smooth animations.</li>
-      </ul>
-      <p class="mt-4 text-gray-600">This internship allowed me to apply my academic knowledge in real-world scenarios and enhanced my skills in full-stack web development and project management.</p>
-    </div>
+    // Add the current time and portfolio value to the chart data
+    timestamps.push(new Date().toLocaleTimeString());
+    growthData.push(totalPortfolioValue);
 
-  </div>
-</section>
+    // Update the chart with the new data
+    if (growthChart) {
+        growthChart.update();
+    } else {
+        const ctx = document.getElementById('growth-chart').getContext('2d');
+        growthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Portfolio Growth',
+                    data: growthData,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',  // line color
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom'
+                    },
+                    y: {
+                        ticks: {
+                            callback: function (value) {
+                                return '$' + value.toFixed(2);  // Format the y-axis as currency
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+// Inside the buyStock and sellStock functions, after a transaction is completed:
+updateGrowthChart();
 
+        // Update growth chart
+        function updateGrowthChart() {
+            const totalPortfolioValue = Object.keys(portfolio).reduce((total, symbol) => {
+                const stock = stocks.find(stock => stock.symbol === symbol);
+                return total + (stock.price * portfolio[symbol].quantity);
+            }, 0) + user.balance;
 
-  </section>
+            timestamps.push(new Date().toLocaleTimeString());
+            growthData.push(totalPortfolioValue);
 
+            if (growthChart) {
+                growthChart.update();
+            } else {
+                const ctx = document.getElementById('growth-chart').getContext('2d');
+                growthChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: timestamps,
+                        datasets: [{
+                            label: 'Portfolio Growth',
+                            data: growthData,
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
-
-<!-- Footer -->
-<footer class="bg-indigo-600 text-white text-center py-8">
-  <div class="container mx-auto space-y-4">
-    <!-- Social Media Links -->
-    <div class="flex justify-center space-x-6">
-      <a href="https://www.linkedin.com/in/manoranjani-selvakumar-b8591227b/" target="_blank" class="text-white hover:text-gray-200">
-        LinkedIn
-      </a>
-      <a href="https://github.com/ManoranjaniS" target="_blank" class="text-white hover:text-gray-200">
-        GitHub
-      </a>
-      <a href="mailto:manoranjaniselvakumar21@gmail.com" class="text-white hover:text-gray-200">
-        Email
-      </a>
-    </div>
-
-    <!-- Copyright Info -->
-    <p class="mt-4 text-sm">&copy; 2024 Manoranjani Selvakumar. All rights reserved.</p>
-  </div>
-</footer>
-
-
-  <script src="script.js"></script>
+    </script>
 </body>
+
 </html>
