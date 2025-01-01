@@ -4,477 +4,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MK Trading Platform</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Event Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.24/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Full window height */
-        html, body {
-            margin: 0;
-            padding: 0;
+        body,
+        html {
             height: 100%;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-        }
-
-        header {
-            background-color: #333;
-            color: white;
-            text-align: left;
-            padding: 20px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 10;
-            font-size: 1.5em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        header h1 {
             margin: 0;
         }
 
-        .container {
+        .background {
+            background-image: url('https://www.oyorooms.com/blog/wp-content/uploads/2018/02/event.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
             flex-direction: column;
-            height: 100%;
-            padding-top: 80px; /* Allow space for header */
-            box-sizing: border-box;
-        }
-
-        .panel {
-            width: 100%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .panel h2, .panel h3 {
-            margin-top: 0;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px 0;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        .form-error {
-            color: red;
-        }
-
-        .form-success {
-            color: green;
-        }
-
-        .stock-item {
-            padding: 10px;
-            margin: 10px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .stock-actions {
-            margin-top: 10px;
-        }
-
-        .stock-pair {
-            display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .growth-chart {
-            width: 100%;
-            height: 400px;
-        }
-
-        /* Adjust for large screens */
-        @media (min-width: 768px) {
-            .container {
-                flex-direction: row;
-            }
-
-            .left-panel, .right-panel {
-                flex-grow: 1;
-                margin: 10px;
-            }
-
-            .right-panel {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
-
-        .insufficient-funds {
-            color: red;
+            color: white;
             font-weight: bold;
         }
 
-        .left-panel, .right-panel {
-            flex-grow: 1;
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
         }
 
-        .right-panel {
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+
+        .search-section {
+            text-align: center;
+            margin-top: 120px;
+        }
+
+        .search-section h2 {
+            font-weight: 900;
+            font-size: 2.5rem;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
             margin-top: 20px;
         }
 
-        .transaction-history-table {
+        .event-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .event-card img {
             width: 100%;
-            border-collapse: collapse;
+            height: 200px;
+            object-fit: cover;
         }
 
-        .transaction-history-table th, .transaction-history-table td {
-            padding: 8px 15px;
-            border: 1px solid #ddd;
+        .event-card .card-body {
+            padding: 15px;
         }
 
-        .transaction-history-table th {
-            background-color: #f4f4f9;
+        .event-card h3 {
+            color: #1d4ed8;
+            font-weight: 700;
         }
 
+        .event-card p {
+            font-weight: 500;
+        }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>MK Trading Platform</h1>
-    </header>
-
-    <div class="container" id="app-container">
-        <!-- Registration Section -->
-        <div id="registration-panel" class="panel">
-            <h2>Register</h2>
-            <form id="registration-form">
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" class="form-input" required>
-                </div>
-                <div>
-                    <label for="password">Password (8 characters max):</label>
-                    <input type="password" id="password" class="form-input" required>
-                </div>
-                <div>
-                    <input type="checkbox" id="captcha" required>
-                    <label for="captcha">I'm not a robot</label>
-                </div>
-                <div>
-                    <button type="submit" class="btn">Register</button>
-                </div>
-                <div id="registration-error" class="form-error"></div>
-            </form>
+    <div class="background">
+        <!-- Navigation Bar -->
+        <div class="navbar">
+            <a href="#">Home</a>
+            <a href="#events">Events</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
         </div>
 
-        <!-- Main Content (Stock Trading) - Hidden initially -->
-        <div id="main-content-panel" class="panel" style="display: none;">
-            <div class="left-panel">
-                <div id="dashboard"></div>
-                <div id="stock-list"></div>
-            </div>
+        <!-- Quick Summary Section -->
+        <div class="text-center text-white mt-12">
+            <a href="index11.html" target="_blank" rel="noopener noreferrer" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                Want to Know a Quick Summary? Click Here
+            
+                        </a>
+        </div>
 
-            <div class="right-panel">
-                <h3>My Growth</h3>
-                <canvas id="growth-chart" class="growth-chart"></canvas>
-                <h3>Transaction History</h3>
-                <table class="transaction-history-table">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Action</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transaction-history"></tbody>
-                </table>
-            </div>
+        <!-- Search Section -->
+        <div class="search-section text-white">
+            <h2>Find Your Event</h2>
+            <input type="text" id="searchInput" class="border p-3 rounded-lg w-1/2 text-black" placeholder="Search for events...">
+            <button onclick="searchEvents()" class="bg-blue-600 text-white py-2 px-6 ml-4 rounded-lg">Search</button>
         </div>
     </div>
 
-    <script>
-        let user = {
-            username: '',
-            password: '',
-            balance: 10000 // Starting balance
-        };
+    <!-- Event Listings Section -->
+    <section id="events" class="container mx-auto my-12">
+        <div id="eventContainer" class="event-grid">
+            <!-- Dynamic event cards will be rendered here -->
+        </div>
+    </section>
 
-        const stocks = [
-            { symbol: "AAPL", name: "Apple Inc.", price: 145.09 },
-            { symbol: "AMZN", name: "Amazon", price: 3341.95 },
-            { symbol: "GOOG", name: "Google", price: 2750.56 },
-            { symbol: "MSFT", name: "Microsoft", price: 299.35 },
-            { symbol: "TSLA", name: "Tesla", price: 774.46 },
-            { symbol: "META", name: "Meta", price: 345.65 },
-            { symbol: "NFLX", name: "Netflix", price: 456.78 },
-            { symbol: "NVDA", name: "NVIDIA", price: 860.12 },
-            { symbol: "AMD", name: "AMD", price: 121.45 },
-            { symbol: "BA", name: "Boeing", price: 227.35 }
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white py-8 mt-12">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Eventify. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const events = [
+            {
+                id: 1,
+                title: " Upcoming Music Concert",
+                description: "Join us for an unforgettable night of live music and performances.",
+                category: "Music",
+                image: "https://c0.wallpaperflare.com/preview/364/666/467/music-event-crowd-entertainment.jpg",
+                link: "./index1.html" // Link to the "Music Concert" details page
+            },
+            {
+                id: 2,
+                title: " Upcoming Tech Conference",
+                description: "Explore the latest in technology and innovation with top industry experts.",
+                category: "Technology",
+                image: "https://thumbs.dreamstime.com/b/innovative-tech-conference-backdrop-made-generative-ai-ai-generated-stunning-image-showcases-innovative-tech-273477608.jpg",
+                link: "./index3.html"
+            },
+            {
+                id: 3,
+                title: " Upcoming Art Exhibition",
+                description: "Discover amazing art pieces by local and international artists.",
+                category: "Art",
+                image: "https://images.hindustantimes.com/img/2021/03/06/1600x900/pjimage_-_2021-03-06T192427.069_1615038899966_1615038907778.jpg",
+                link: "./index2.html"
+            }
         ];
 
-        let portfolio = {};
-        let transactionHistory = [];
-        let growthData = [];
-        let timestamps = [];
-        let growthChart;
-
-        // Handle registration
-        document.getElementById("registration-form").addEventListener("submit", function (event) {
-            event.preventDefault();
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value.trim();
-            const captcha = document.getElementById("captcha").checked;
-
-            // Validate username and password
-            if (username === '' || password === '') {
-                document.getElementById("registration-error").textContent = 'Username and password are required.';
-                return;
-            }
-            if (password.length > 8) {
-                document.getElementById("registration-error").textContent = 'Password must be 8 characters or less.';
-                return;
-            }
-            if (!captcha) {
-                document.getElementById("registration-error").textContent = 'You must confirm you are not a robot.';
-                return;
-            }
-
-            // Successful registration
-            user.username = username;
-            user.password = password;
-            document.getElementById("registration-panel").style.display = 'none';
-            document.getElementById("main-content-panel").style.display = 'flex';
-            showDashboard();
-            displayStocks();
-        });
-
-        // Show dashboard with portfolio and transaction history
-        function showDashboard() {
-            const dashboard = document.getElementById("dashboard");
-            dashboard.innerHTML = ` 
-                <h2>Welcome, ${user.username}!</h2>
-                <p>Your current balance: $${user.balance.toFixed(2)}</p>
-                <h3>Your Portfolio</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Shares</th>
-                            <th>Average Price</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody id="portfolio-table-body"></tbody>
-                </table>
-                ${user.balance <= 0 ? '<p class="insufficient-funds">Insufficient funds to make any transactions.</p>' : ''}
-            `;
-        }
-
-        // Display stocks in 5 pairs
-        function displayStocks() {
-            const stockList = document.getElementById("stock-list");
-            stockList.innerHTML = '';
-            for (let i = 0; i < stocks.length; i += 2) {
-                const stockPair = document.createElement('div');
-                stockPair.classList.add('stock-pair');
-                stockPair.innerHTML = `
-                    <div class="stock-item">
-                        <div class="stock-name">${stocks[i].name} (${stocks[i].symbol})</div>
-                        <div class="stock-price">$${stocks[i].price.toFixed(2)}</div>
-                        <div class="stock-actions">
-                            <button class="btn" onclick="buyStock('${stocks[i].symbol}', ${stocks[i].price})">Buy</button>
-                            <button class="btn" onclick="sellStock('${stocks[i].symbol}', ${stocks[i].price})">Sell</button>
-                        </div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="stock-name">${stocks[i + 1].name} (${stocks[i + 1].symbol})</div>
-                        <div class="stock-price">$${stocks[i + 1].price.toFixed(2)}</div>
-                        <div class="stock-actions">
-                            <button class="btn" onclick="buyStock('${stocks[i + 1].symbol}', ${stocks[i + 1].price})">Buy</button>
-                            <button class="btn" onclick="sellStock('${stocks[i + 1].symbol}', ${stocks[i + 1].price})">Sell</button>
-                        </div>
+        function renderEvents(eventList = events) {
+            const container = document.getElementById('eventContainer');
+            container.innerHTML = '';
+            eventList.forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'event-card';
+                card.innerHTML = `
+                    <img src="${event.image}" alt="${event.title}">
+                    <div class="card-body">
+                        <h3>${event.title}</h3>
+                        <p>${event.description}</p>
+                        <a href="${event.link}" target="_blank" rel="noopener noreferrer"
+                            class="bg-blue-600 text-white py-2 px-4 mt-4 rounded hover:bg-blue-700">
+                            View Details
+                        </a>
                     </div>
                 `;
-                stockList.appendChild(stockPair);
-            }
-        }
-
-        // Handle stock buying
-        function buyStock(symbol, price) {
-            const quantity = prompt(`How many shares of ${symbol} do you want to buy?`);
-            if (quantity && !isNaN(quantity) && quantity > 0) {
-                const totalCost = price * quantity;
-                if (user.balance >= totalCost) {
-                    // Update balance and portfolio
-                    user.balance -= totalCost;
-                    if (!portfolio[symbol]) {
-                        portfolio[symbol] = { price, quantity: 0 };
-                    }
-                    portfolio[symbol].quantity += parseInt(quantity);
-                    addTransaction(symbol, 'Buy', quantity, price);
-                    showDashboard();
-                    updateGrowthChart();
-                } else {
-                    alert('Insufficient funds to make this purchase.');
-                }
-            }
-        }
-
-        // Handle stock selling
-        function sellStock(symbol, price) {
-            const quantity = prompt(`How many shares of ${symbol} do you want to sell?`);
-            if (quantity && !isNaN(quantity) && quantity > 0 && portfolio[symbol] && portfolio[symbol].quantity >= quantity) {
-                const totalSale = price * quantity;
-                user.balance += totalSale;
-                portfolio[symbol].quantity -= parseInt(quantity);
-                if (portfolio[symbol].quantity === 0) {
-                    delete portfolio[symbol];
-                }
-                addTransaction(symbol, 'Sell', quantity, price);
-                showDashboard();
-                updateGrowthChart();
-            } else {
-                alert('You do not have enough shares to sell.');
-            }
-        }
-
-        // Record transaction
-        function addTransaction(symbol, action, quantity, price) {
-            const total = price * quantity;
-            transactionHistory.push({ symbol, action, quantity, price, total });
-            displayTransactionHistory();
-        }
-
-        // Display transaction history
-        function displayTransactionHistory() {
-            const history = document.getElementById("transaction-history");
-            history.innerHTML = '';
-            transactionHistory.forEach(transaction => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${transaction.symbol}</td>
-                    <td>${transaction.action}</td>
-                    <td>${transaction.quantity}</td>
-                    <td>$${transaction.price.toFixed(2)}</td>
-                    <td>$${transaction.total.toFixed(2)}</td>
-                `;
-                history.appendChild(row);
+                container.appendChild(card);
             });
         }
-// Update growth chart with portfolio value (balance + stocks)
-function updateGrowthChart() {
-    // Calculate the total value of the portfolio
-    const totalPortfolioValue = Object.keys(portfolio).reduce((total, symbol) => {
-        const stock = stocks.find(stock => stock.symbol === symbol);
-        return total + (stock.price * portfolio[symbol].quantity);
-    }, 0) + user.balance;
 
-    // Add the current time and portfolio value to the chart data
-    timestamps.push(new Date().toLocaleTimeString());
-    growthData.push(totalPortfolioValue);
-
-    // Update the chart with the new data
-    if (growthChart) {
-        growthChart.update();
-    } else {
-        const ctx = document.getElementById('growth-chart').getContext('2d');
-        growthChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: timestamps,
-                datasets: [{
-                    label: 'Portfolio Growth',
-                    data: growthData,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',  // line color
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'linear',
-                        position: 'bottom'
-                    },
-                    y: {
-                        ticks: {
-                            callback: function (value) {
-                                return '$' + value.toFixed(2);  // Format the y-axis as currency
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-}
-// Inside the buyStock and sellStock functions, after a transaction is completed:
-updateGrowthChart();
-
-        // Update growth chart
-        function updateGrowthChart() {
-            const totalPortfolioValue = Object.keys(portfolio).reduce((total, symbol) => {
-                const stock = stocks.find(stock => stock.symbol === symbol);
-                return total + (stock.price * portfolio[symbol].quantity);
-            }, 0) + user.balance;
-
-            timestamps.push(new Date().toLocaleTimeString());
-            growthData.push(totalPortfolioValue);
-
-            if (growthChart) {
-                growthChart.update();
-            } else {
-                const ctx = document.getElementById('growth-chart').getContext('2d');
-                growthChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: timestamps,
-                        datasets: [{
-                            label: 'Portfolio Growth',
-                            data: growthData,
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: {
-                                type: 'linear',
-                                position: 'bottom'
-                            }
-                        }
-                    }
-                });
-            }
+        function searchEvents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filteredEvents = events.filter(event => event.title.toLowerCase().includes(query));
+            renderEvents(filteredEvents);
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEvents();
+        });
     </script>
 </body>
 
