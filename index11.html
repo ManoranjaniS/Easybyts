@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.24/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .event-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .event-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-card .card-body {
+            padding: 15px;
+        }
+
+        .event-card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+
+        .event-card p {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #4b5563;
+        }
+
+        .quick-summary {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .quick-summary button {
+            margin: 5px;
+            background-color: #1d4ed8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .quick-summary button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans text-gray-800">
+    <header class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-3xl font-bold">Upcoming Events</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12">
+        <div class="quick-summary">
+            <a href="index1.html"><button>Upcoming Events</button></a>
+            <a href="index2.html"><button>Upcoming Events</button></a>
+            <a href="index3.html"><button>Upcoming Events</button></a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Event 1 -->
+            <a href="index1.html" class="event-card">
+                <img src="https://assets-in.bmscdn.com/nmcms/events/banner/desktop/media-desktop-haazri-a-r-rahman-live-in-concert-0-2024-10-25-t-5-22-59.jpg" alt="HAAZRI">
+                <div class="card-body">
+                    <h3>"HAAZRI" A.R. Rahman Live In Concert</h3>
+                    <p>Date: January 17, 2025</p>
+                    <p>Location: Jio World Garden</p>
+                </div>
+            </a>
+
+            <!-- Event 2 -->
+            <a href="index2.html" class="event-card">
+                <img src="https://cdn11.bigcommerce.com/s-p66uh2e57r/images/stencil/1280x1280/products/25714/36230/paradise_lost_lost_paradise_lp_1__95844.1635950242.jpg?c=1" alt="Paradise Lost">
+                <div class="card-body">
+                    <h3>Paradise Lost: Art Exhibition</h3>
+                    <p>Date: January 26, 2025</p>
+                    <p>Location: 3 Hanover Square, London, UK</p>
+                </div>
+            </a>
+
+            <!-- Event 3 -->
+            <a href="index3.html" class="event-card">
+                <img src="https://images.ctfassets.net/psyys3eoga8f/5QeBZFrQXSwgjTBfVYs8Vr/94a3f5744d7a90d7d7c8cbacbca0d31b/FINOVATE.png" alt="Finovate Europe">
+                <div class="card-body">
+                    <h3>Finovate Europe</h3>
+                    <p>Date: February 25-26, 2025</p>
+                    <p>Location: London, UK</p>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-blue-600 text-white py-6 mt-12">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Eventify. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
